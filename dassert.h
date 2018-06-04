@@ -3,7 +3,8 @@
  * If use DWARN, exit with WARNCOUNT from main()
  
 ..
-
+   #include <dassert.h>
+   
    static size_t WARNCOUNT = 0;
    
    int main()
