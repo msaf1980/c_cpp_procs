@@ -18,4 +18,5 @@
 
 #define DASSERT(x, msg) if (!(x)) { fprintf(stderr, "%s:%d: (%s) %s : %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, #x, msg); abort(); }
 #define DWARN(x, msg) if (!(x)) { fprintf(stderr, "%s:%d: (%s) %s : %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, #x, msg); WARNCOUNT++; }
+#define DWARN_C(x, msg, count) if (!(x)) { fprintf(stderr, "%s:%d: (%s) %s : %s (%lu)\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, #x, msg, count); WARNCOUNT++; }
 #define DMSG(msg) fprintf(stderr, "%s:%d: (%s) : %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, msg); }
