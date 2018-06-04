@@ -1,0 +1,166 @@
+-------------------------------------------
+EC(cond, label, code, x)
+
+EC macros for check condition. If condition coincidence, set ec to code, execute  x, and goto to label
+For use set label choosen in parameter label and set ec variable
+int ec = 0;
+
+Examples:
+1) DLopen
+    int ec = 0;
+    
+For check lib_handle is NULL for error condition
+    EC( (lib_handle = dlopen(lib, RTLD_LAZY)) == NULL, EXIT, 1, fprintf(stderr, "%s\n", dlerror()) );
+
+For check error is not NULL for error condition
+    char * error;
+    fn = dlsym(lib_handle, func);
+    EC( (error = dlerror()) != NULL, EXIT, 2, fprintf(stderr, "%s\n", error) );
+    
+EXIT:
+    SOME EXITUP CODE
+    return ec;
+ 
+2)  Read file - with error buffer (not thread safe)
+
+	char fname[256];
+	FILE *f;
+	char *line = NULL;
+	char *ptr;
+	size_t len = 0;
+	ssize_t read;
+    
+    int ec = 0;
+
+error reporting with perror
+    EC( (f = fopen(fname, "r")) == NULL, EXIT, errno, perror("fopen: ") );
+or with fprintf and strerror   
+	EC( (f = fopen(fname, "r")) == NULL, EXIT, errno, 
+		fprintf(stderr, "%s: %s\n", strerror(ec), fname) );
+	while ((read = getline(&line, &len, f)) != -1) {
+		printf(line);
+	}
+	if (ferror(f))
+		fprintf(stderr, "i/o error: %s\n", fname); 
+EXIT:
+	free(line);
+	if (f != NULL) fclose(f);
+	return ec;
+    
+3)  Read file - with error buffer (thread safe)
+
+#define ERR_SIZE 512
+
+    ..
+
+	char fname[256];
+	FILE *f;
+	char *line = NULL;
+	char *ptr;
+	size_t len = 0;
+	ssize_t read;
+    
+    int ec = 0;
+    char error[ERR_SIZE];
+    
+	EC( (f = fopen(fname, "r")) == NULL, EXIT, errno, 
+		fprintf(stderr, "%s: %s\n", strerror_r(ec, error, ERR_SIZE), fname) );
+	while ((read = getline(&line, &len, f)) != -1) {
+		printf(line);
+	}
+	if (ferror(f))
+		fprintf(stderr, "i/o error: %s\n", fname); 
+EXIT:
+	free(line);
+	if (f != NULL) fclose(f);
+	return ec;
+   
+
+
+-------------------------------------------
+ECS(cond, label, code)
+
+ EC without seting error code
+ 
+ Examples
+ 
+ int ec = 0;
+ 
+ ECN( (ec = pthread_attr_init(&t_attr)) != 0, EXIT, perror(ec) );
+ 
+EXIT:
+ return ec;
+ 
+-------------------------------------------
+ECN(cond, label, x)
+
+silent EC without execution additional instruction on condition 
+
+Examples
+
+int some_func() {
+    char fname[256];
+    FILE *f;
+    ..
+    int ec = 0;
+ 
+    ECS( (f = fopen(fname, "r")) == NULL, EXIT, errno );
+    
+    ..
+    
+    if (ferror(f))
+        ec = 2;
+EXIT:
+    if (f != NULL) fclose(f);
+    return ec;
+}
+
+-------------------------------------------
+EC_ERRNO(cond, label, x) if (cond) { ec = errno; x; goto label; }
+
+like EC but without set additional code (use errno)
+
+-------------------------------------------
+ECS_ERRNO(cond, label)
+
+silent EC_ERRNO
+
+-------------------------------------------
+ECN(cond, label, x)
+
+like EC but without set additional code to ec
+
+Examples:
+
+#define BUF_SIZE 1024
+ 
+    int ec = 0;
+
+    char buf[BUF_SIZE];
+
+    ECN( (ec = pthread_attr_init(&t_attr)) != 0, EXIT, PERROR_R("pthread_attr", ec, buf, BUF_SIZE) );
+
+EXIT:
+    return ec;
+
+-------------------------------------------
+PERROR(str, code)
+
+perror on error code
+
+-------------------------------------------
+PERROR2(str, str2, code)
+
+perror on error code with double prefix
+
+-------------------------------------------
+PERROR_R(str, code, buf, bufsize)
+
+thread-safe perror on error code
+
+-------------------------------------------
+PERROR_R2(str, str2, code, buf, bufsize)
+
+thread-safe perror on error code with double prefix
+
+-------------------------------------------

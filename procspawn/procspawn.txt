@@ -1,0 +1,43 @@
+https://github.com/sni/mod_gearman/blob/master/common/popenRWE.c
+
+    char *processed_command = ..;
+    FILE *fp;
+    struct proc_pipes proc;
+    PROC_PIPES_INIT(proc);
+    int status;
+    if ( (proc.pid = proc_spawn(processed_command, NULL, proc.pipes, 1)) == -1)
+            perror("procspawn");
+            exit(1);
+    }
+
+    char *msg = .. ;
+    /* write to stdin */
+    write(proc.pipes[0], msg, strlen(msg);
+    
+    /* check stdout */
+    if( (fp = fdopen(proc.pipes[1],"r")) == NULL ){
+            perror("fdopen stdout");
+            exit(1);
+    }
+    
+    ..
+  
+    /* check stderr */
+    if( (fp = fdopen(proc.pipes[2],"r")) == NULL ){
+            perror("fdopen stdout");
+            exit(1);
+    }
+    
+    ..
+        
+
+    /* close the process */
+    status = PROC_CLOSE(proc);
+    if (WIFEXITED(status))
+        printf("exited, status=%d\n", WEXITSTATUS(status));
+    else if (WIFSIGNALED(status))
+                       printf("killed by signal %d\n", WTERMSIG(status));
+    else if (WIFSTOPPED(status))
+        printf("stopped by signal %d\n", WSTOPSIG(status));
+    else if (WIFCONTINUED(status))
+        printf("continued\n");
