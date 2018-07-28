@@ -76,10 +76,8 @@ void arg_free(char ***arg)
 	if (*arg == NULL)
 		return;
 	p = *arg;
-	while (1)
+	while (*p != NULL)
 	{
-		if (*p == NULL)
-			break;
 		free(*p);
 		p++;
 	}
