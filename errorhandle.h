@@ -19,7 +19,7 @@ For use set label choosen in parameter label and set ec variable */
 #define EC_JUMP(label, code, x) { ec = code; x; goto label; }
 
 /* silent EC_JUMP */ 
-#define ECS_JUMP(label, code) { ec = code; x; goto label; }
+#define ECS_JUMP(label, code) { ec = code; goto label; }
 
 /* perror on error code */
 #define PERROR(str, code) fprintf(stderr, "%s: %s\n", str, strerror(code))
