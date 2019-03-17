@@ -15,6 +15,12 @@ For use set label choosen in parameter label and set ec variable */
 /* like EC but without set additional code to ec */
 #define ECN(cond, label, x) if (cond) { x; goto label; }
 
+/* like EC but without conditional */
+#define EC_JUMP(label, code, x) { ec = code; x; goto label; }
+
+/* silent EC_JUMP */ 
+#define ECS_JUMP(label, code) { ec = code; x; goto label; }
+
 /* perror on error code */
 #define PERROR(str, code) fprintf(stderr, "%s: %s\n", str, strerror(code))
 
