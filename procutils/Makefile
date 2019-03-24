@@ -10,6 +10,6 @@ check: procutils.o test.o
 	$(CC) $< -c -o $@ $(CFLAGS)
 
 clean:
-	rm -f test procutils.o test.o
+	rm -f check procutils.o test.o
 
 .PHONY: test clean
