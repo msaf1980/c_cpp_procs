@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "procutils.h"
+#include "procutil.h"
 
 int main(void)
 {
