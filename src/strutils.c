@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdarg.h>
+#include <errno.h>
 
 int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt, ...)
 {
@@ -61,14 +61,13 @@ int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt, ...)
 	}
 }
 
-int is_num(char *str)
-{
-	while (*str)
-	{
-		if (*str >= '0' && *str <= '9')
-			++str;
-		else
-			return 0;
-	}
-	return 1;
+int str2long(const char *str, long int *n, char **temp) {
+    errno = 0;
+    *n = strtol(str, temp, 10);
+    if (*n == 0 && temp != NULL && *temp != '\0') {
+        /* value must be a number, wrong sequence in temp */
+        errno = EINVAL;
+    }
+    return errno;
 }
+

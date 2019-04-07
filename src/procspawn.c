@@ -25,8 +25,7 @@ pid_t proc_spawn(const char *command, char *const arg[], char *const env[], int 
 		close(out[1]);
 		pipes[0] = in[1];
 		pipes[1] = out[0];
-		if (handle_err)
-		{
+		if (handle_err) {
 			close(err[1]);
 			pipes[2] = err[0];
 		}
@@ -45,8 +44,7 @@ pid_t proc_spawn(const char *command, char *const arg[], char *const env[], int 
 			_exit(127);
 
 		}
-		if (handle_err) 
-		{
+		if (handle_err) {
 			close(err[0]);
 			close(STDERR_FILENO); /* replace sterr */
 			if (dup2(err[1], STDERR_FILENO == -1)) {
@@ -64,8 +62,7 @@ pid_t proc_spawn(const char *command, char *const arg[], char *const env[], int 
 			if (i > 2 && i != pipes[0] && i != pipes[1] && i != pipes[2]) 
 				close(i);
         
-		if (arg == NULL || arg[0] == NULL)
-		{
+		if (arg == NULL || arg[0] == NULL) {
 			if (env == NULL)
 				execl( "/bin/sh", "/bin/sh", "-c", command, NULL );
 			else
@@ -84,8 +81,7 @@ pid_t proc_spawn(const char *command, char *const arg[], char *const env[], int 
 	return pid;
 
 ERR_FORK:
-	if (handle_err)
-	{
+	if (handle_err) {
 		if (errno && saveerrno == 0) saveerrno = errno;
 		close(err[0]);
 		close(err[1]);
@@ -103,8 +99,7 @@ ERR_IN:
 	return -1;
 }
 
-void proc_close_pipes(int *pipes)
-{
+void proc_close_pipes(int *pipes) {
         if (pipes[0] > 0) {
                 close(pipes[0]);
                 pipes[0] = -1;
@@ -119,15 +114,14 @@ void proc_close_pipes(int *pipes)
         }
 }
 
-int proc_close(const pid_t pid, int *pipes, int *status)
-{
+int proc_close(const pid_t pid, int *pipes, int *status) {
 	proc_close_pipes(pipes);
 	if (pid < 0)
 		return -1;
 	return waitpid(pid, status, 0);
 }
 
-int proc_status(const pid_t pid, int *status)
-{
+int proc_status(const pid_t pid, int *status) {
     return waitpid(pid, status, WNOHANG);
 }
+

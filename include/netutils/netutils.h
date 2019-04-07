@@ -16,8 +16,8 @@ extern "C" {
 /* Set SO_REUSEADDR for listen socket */
 int set_reuseaddr(int sock_fd);
 
-/* return 1 if IPv4 string is valid, else return 0 */
-int is_valid_ipv4(char *ip_str);
+/* return 0 if IPv4 string is valid, else return 1 */
+int validate_ipv4(char *ip_str);
 
 #ifdef __cplusplus
 }

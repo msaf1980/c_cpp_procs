@@ -1,4 +1,4 @@
-#include "netutils.h"
+#include "netutils/netutils.h"
 #include "strutils.h"
 #include <string.h>
 #include <stdlib.h>
@@ -9,7 +9,7 @@ int set_reuseaddr(int sock_fd)
 	return setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
 }
 
-int is_valid_ipv4(char *str)
+int validate_ipv4(char *str)
 {
 	int dots = 0, digits = 0;
 	char dbuf[4];
@@ -22,18 +22,22 @@ int is_valid_ipv4(char *str)
 		 /* after parsing string, it must contain only digits */
 		if (*str == '\0' || *str == '.')
 		{
-			if (digits == 0)
+			if (digits == 0 || dots > 4)
 				return 0;
-			else if (*str == '\0' && dots != 3)
-				return 0;
+			else if (*str == '\0' && (dots == 0 || dots == 3))
+				return 1;
 			else if (*str == '.' && dots == 3)
 				return 0;
 			dbuf[digits] = '\0';
 			digits = 0;
-			if (! is_num(dbuf) || atoi(dbuf) > 255)
+            long n;
+            char *tmp;
+			if (str2long(dbuf, &n, &tmp) != 0)
 				return 0;
-			else if (*str == '\0')
-				return 1;
+            if ((dots == 0 || dots == 3) && (n <= 0 || n >= 254))
+                return 0;
+            else if (n < 0 || n > 254)
+                return 0;
 			dots++;
 		}
 		else if (*str >= '0' && *str <= '9' && dots < 4)

@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "mimetypes.h"
+#include "httputils/mimetypes.h"
 
 const char* mime_type_by_file_ext(char *filename)
 {

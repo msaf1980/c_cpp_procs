@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include <stdlib.h>
+
 /*
  * vsnprintf with dynamically allocated buffer (need to bee free, if function return value >=0)
  * @param p - pointer to allocated buffer 
@@ -30,8 +32,12 @@ extern "C" {
  */
 int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt, ...);
 
-/* return 1 if string contain only digits, else return 0 */
-int is_num(char *str);
+/*
+ *   EINVAL, not a number
+ *   ERANGE, value is out of range
+ *   EINVAL, value is invalid
+*/
+int str2long(const char *str, long int *n, char **temp);
 
 #ifdef __cplusplus
 }

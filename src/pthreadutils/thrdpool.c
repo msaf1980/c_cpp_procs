@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "pthread.h"
 
-#include "thrdpool.h"
+#include "pthreadutils/thrdpool.h"
 
 
 int thrdpool_init(thrdpool_t *pool, size_t workers, pthread_attr_t attr, void *(*function)(void *))

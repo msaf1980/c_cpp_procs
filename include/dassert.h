@@ -24,8 +24,11 @@ int main()
  
 #define DASSERT(x, msg) if (!(x)) { fprintf(stderr, "FAIL %s:%d: (%s) %s : %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, #x, msg); abort(); }
 
-#define DMSG(msg) fprintf(stderr, "%s:%d: (%s) : %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, msg); }
+#define DMSG(msg) { fprintf(stderr, "%s:%d: (%s) : %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, msg); }
 
+#define DWARNMSG(msg) { fprintf(stderr, "FAIL %s:%d: (%s) : %s\n", \
+                                        __FILE__, __LINE__, __PRETTY_FUNCTION__, msg); WARNCOUNT++; }
+ 
 #define DWARN(x, msg) if (!(x)) { fprintf(stderr, "FAIL %s:%d: (%s) %s : %s\n", \
                                         __FILE__, __LINE__, __PRETTY_FUNCTION__, #x, msg); WARNCOUNT++; } \
                       else if (DWARN_VERBOSE) { fprintf(stderr, "PASS %s:%d: (%s) %s : %s\n", \
