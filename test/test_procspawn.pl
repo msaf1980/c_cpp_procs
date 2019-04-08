@@ -12,5 +12,5 @@ for ($i = 0; $i <= $last; $i++)
 	else { printf(" %s", $ARGV[$i]); }
 	if ($i == $last) { print("\n"); }
 }
-$test =  $ENV{'TESTENV'};
+$test =  $ENV{'PROCSPAWNENV'};
 printf("%s\n", $test) if ($test ne "");

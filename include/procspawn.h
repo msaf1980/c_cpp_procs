@@ -30,9 +30,9 @@ typedef struct proc_pipes proc_pipes;
 #define PROC_PIPES_INIT(p) do { p.pid = -1; p.pipes[0] = -1; p.pipes[1] = -1; p.pipes[2] = -1; } while(0)
 #define PROC_PIPES_INIT_P(p) do { p->pid = -1; p->pipes[0] = -1; p->pipes[1] = -1; p->pipes[2] = -1; } while(0)
 
-#define PROC_CLOSE_STDIN(pp) if (pp[0]) { close(pp[0]); pp[0] = -1; }
-#define PROC_CLOSE_STDOUT(pp) if (pp[1]) { close(pp[1]); pp[1] = -1; }
-#define PROC_CLOSE_STDERR(pp) if (pp[2]) { close(pp[2]); pp[2] = -1; }
+#define PROC_CLOSE_STDIN(pp) if (pp[0] > 0) { close(pp[0]); pp[0] = -1; }
+#define PROC_CLOSE_STDOUT(pp) if (pp[1] > 0) { close(pp[1]); pp[1] = -1; }
+#define PROC_CLOSE_STDERR(pp) if (pp[2] > 0) { close(pp[2]); pp[2] = -1; }
 
 #define PROC_CLOSE(p, s) proc_close(p.pid, p.pipes, s)
 #define PROC_CLOSE_P(p, s) proc_close(p->pid, p->pipes, s)

@@ -21,7 +21,7 @@ int main()
 #ifndef DWARN_VERBOSE
 #define DWARN_VERBOSE 0
 #endif
- 
+
 #define DASSERT(x, msg) if (!(x)) { fprintf(stderr, "FAIL %s:%d: (%s) %s : %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, #x, msg); abort(); }
 
 #define DMSG(msg) { fprintf(stderr, "%s:%d: (%s) : %s\n", __FILE__, __LINE__, __PRETTY_FUNCTION__, msg); }

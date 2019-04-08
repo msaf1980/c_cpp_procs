@@ -20,38 +20,35 @@ extern "C" {
  *
 void *process(void *thrdpool)
 {
-	thrdpool_t *pool = (thrdpool_t *) thrdpool;
-	while (1)
-	{
-		//Wait on condition variable
-		pthread_mutex_lock(&(pool->lock));
-		pthread_cond_wait(&(pool->notify), &(pool->lock));
-	
-		if (pool->shutdown)
-			break;
+  thrdpool_t *pool = (thrdpool_t *) thrdpool;
+  while (1)
+  {
+    //Wait on condition variable
+    pthread_mutex_lock(&(pool->lock));
+    pthread_cond_wait(&(pool->notify), &(pool->lock));
+    if (pool->shutdown)
+      break;
 
-		//Do blocked part of task, for example read from queue
+    //Do blocked part of task, for example read from queue
+    //Unlock
+    pthread_mutex_unlock(&(pool->lock));
 
+    //Do a task
 
-		//Unlock
-		pthread_mutex_unlock(&(pool->lock));
-
-		//Do a task
-
-	}
-	pthread_mutex_unlock(&(pool->lock));
-	return NULL;
+  }
+  pthread_mutex_unlock(&(pool->lock));
+  return NULL;
 }
 */
 
 const char * const thrdpool_error[] =
 {
-	"invalid pool",
-	"pool lock failure",
-	"pool worker failure",
-	"pool was shutdown",
-	"pool is running",
-	"pool memory alloc failed"
+  "invalid pool",
+  "pool lock failure",
+  "pool worker failure",
+  "pool was shutdown",
+  "pool is running",
+  "pool memory alloc failed"
 };
 
 /**
@@ -64,12 +61,12 @@ const char * const thrdpool_error[] =
  */
 struct thrdpool_t
 {
-	pthread_mutex_t lock;
-	pthread_cond_t notify;
-	pthread_t *workers; /* workers */
-	size_t count; /* number of workers */
-	//size_t tasks; /* number of running tasks */
-	short shutdown;
+  pthread_mutex_t lock;
+  pthread_cond_t notify;
+  pthread_t *workers; /* workers */
+  size_t count; /* number of workers */
+  //size_t tasks; /* number of running tasks */
+  short shutdown;
 };
 
 typedef struct thrdpool_t thrdpool_t;
@@ -79,7 +76,7 @@ int thrdpool_init(thrdpool_t *pool, size_t workers, pthread_attr_t attr, void *(
 int thrdpool_destroy(thrdpool_t *pool, int flags);
 int thrdpool_free(thrdpool_t *pool);
 int thrdpool_notify(thrdpool_t *pool);
-	
+
 #ifdef __cplusplus
 }
 #endif
