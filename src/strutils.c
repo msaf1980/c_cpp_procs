@@ -1,7 +1,6 @@
 #include <errno.h>
 #include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
+#include <strutils.h>
 
 int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt,
                 ...) {
