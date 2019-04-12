@@ -12,6 +12,7 @@ extern "C" {
 /* socket helpers macros */
 #define SA struct sockaddr
 #define SA_IN struct sockaddr_in
+#define SA_STOR struct sockaddr_storage
 
 /* Set SO_REUSEADDR for listen socket */
 int set_reuseaddr(int sock_fd);
