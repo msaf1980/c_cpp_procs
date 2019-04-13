@@ -2,10 +2,18 @@
 #include "strutils.h"
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 int set_reuseaddr(int sock_fd) {
-    int enable = 1;
-    return setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
+    int reuse = 1;
+    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0)
+        return -1;
+#ifdef SO_REUSEPORT
+    /* since Linux 3.9 */
+    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEPORT, &reuse, sizeof(reuse)) < 0)
+        return -1;
+#endif
+    return 0;
 }
 
 int validate_ipv4(char *str) {
@@ -28,7 +36,8 @@ int validate_ipv4(char *str) {
             digits = 0;
             long n;
             char *tmp;
-            if (str2long(dbuf, &n, &tmp) != 0)
+            n = str2l(dbuf, &tmp, 10);
+            if (errno != 0)
                 return 0;
             if ((dots == 0 || dots == 3) && (n <= 0 || n >= 254))
                 return 0;

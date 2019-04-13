@@ -33,11 +33,14 @@ extern "C" {
 int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt, ...);
 
 /*
+ * Additional checks for strtol and etc. errno set to EINVAL, if **endptr not '\0'
+ *   on error, errno was set
  *   EINVAL, not a number
  *   ERANGE, value is out of range
  *   EINVAL, value is invalid
 */
-int str2long(const char *str, long int *n, char **temp);
+long int str2l(const char *str, char **endptr, const int base);
+long int str2ll(const char *str, char **endptr, const int base);
 
 #ifdef __cplusplus
 }

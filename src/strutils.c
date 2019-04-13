@@ -1,6 +1,8 @@
 #include <errno.h>
 #include <stdarg.h>
 #include <strutils.h>
+#include <string.h>
+#include <stdio.h>
 
 int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt,
                 ...) {
@@ -54,12 +56,24 @@ int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt,
     }
 }
 
-int str2long(const char *str, long int *n, char **temp) {
+long int str2l(const char *str, char **endptr, const int base) {
     errno = 0;
-    *n = strtol(str, temp, 10);
-    if (*n == 0 && temp != NULL && *temp != '\0') {
+    long int n;
+    n = strtol(str, endptr, base);
+    if (n == 0 && endptr != NULL && **endptr != '\0') {
         /* value must be a number, wrong sequence in temp */
         errno = EINVAL;
     }
-    return errno;
+    return n;
+}
+
+long int str2ll(const char *str, char **endptr, const int base) {
+    errno = 0;
+    long long int n;
+    n = strtoll(str, endptr, base);
+    if (n == 0 && endptr != NULL && **endptr != '\0') {
+        /* value must be a number, wrong sequence in temp */
+        errno = EINVAL;
+    }
+    return n;
 }
