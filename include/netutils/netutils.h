@@ -17,6 +17,9 @@ extern "C" {
 /* Set SO_REUSEADDR for listen socket */
 int set_reuseaddr(int sock_fd);
 
+int set_recv_timeout(int sock_fd, struct timeval *tv);
+int set_send_timeout(int sock_fd, struct timeval *tv);
+
 /* Set SO_KEEPALIVE for socket and parameters */
 int set_keepalive(int sock_fd, int *idle, int *interval, int *maxpkt);
 

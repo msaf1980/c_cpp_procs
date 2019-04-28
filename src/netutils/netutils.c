@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/time.h>
 #include <netinet/tcp.h>
 
 #include "netutils/netutils.h"
@@ -16,6 +17,14 @@ int set_reuseaddr(int sock_fd) {
         return -1;
 #endif
     return 0;
+}
+
+int set_recv_timeout(int sock_fd, struct timeval *tv) {
+    return setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO, tv, sizeof(struct timeval));
+}
+
+int set_send_timeout(int sock_fd, struct timeval *tv) {
+    return setsockopt(sock_fd, SOL_SOCKET, SO_SNDTIMEO, tv, sizeof(struct timeval));
 }
 
 int set_keepalive(int sock_fd, int *idle, int *interval, int *maxpkt) {
