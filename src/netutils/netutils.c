@@ -1,8 +1,10 @@
-#include "netutils/netutils.h"
-#include "strutils.h"
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <netinet/tcp.h>
+
+#include "netutils/netutils.h"
+#include "strutils.h"
 
 int set_reuseaddr(int sock_fd) {
     int reuse = 1;
@@ -13,6 +15,23 @@ int set_reuseaddr(int sock_fd) {
     if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEPORT, &reuse, sizeof(reuse)) < 0)
         return -1;
 #endif
+    return 0;
+}
+
+int set_keepalive(int sock_fd, int *idle, int *interval, int *maxpkt) {
+    int ec = 0;
+    int enable = 1;
+    if (setsockopt(sock_fd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int)) != -1)
+        return -1;
+
+    if (setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int)) != -1)
+        return -1;
+
+    if (setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int)) != -1)
+        return 10;
+
+    if (setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int)) != -1)
+        return -1;
     return 0;
 }
 

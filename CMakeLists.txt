@@ -22,7 +22,7 @@ include_directories( ${DIR_INCLUDES} )
 
 #Scan dir for standart source files
 aux_source_directory( ${DIR_SOURCES} SOURCES )
-add_library( c_procs ${SOURCES} )
+add_library( cutils ${SOURCES} )
 
 aux_source_directory( ${DIR_SOURCES}/httputils SOURCES_HTTPUTILS )
 add_library( httputils ${SOURCES_HTTPUTILS} )

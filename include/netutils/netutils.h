@@ -1,11 +1,11 @@
 #ifndef _NETUTILS_H_
 #define _NETUTILS_H_
 
-#include <sys/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 
@@ -16,6 +16,9 @@ extern "C" {
 
 /* Set SO_REUSEADDR for listen socket */
 int set_reuseaddr(int sock_fd);
+
+/* Set SO_KEEPALIVE for socket and parameters */
+int set_keepalive(int sock_fd, int *idle, int *interval, int *maxpkt);
 
 /* return 0 if IPv4 string is valid, else return 1 */
 int validate_ipv4(char *ip_str);

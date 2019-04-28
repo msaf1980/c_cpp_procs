@@ -7,6 +7,15 @@ extern "C" {
 
 #include <stdlib.h>
 
+#ifndef __BSD_VISIBLE
+/*
+ * Copy string src to buffer dst of size dsize.  At most dsize-1
+ * chars will be copied.  Always NUL terminates (unless dsize == 0).
+ * Returns strlen(src); if retval >= dsize, truncation occurred.
+ */
+size_t strlcpy(char *dst, const char *src, size_t dsize);
+#endif
+
 /*
  * vsnprintf with dynamically allocated buffer (need to bee free, if function return value >=0)
  * @param p - pointer to allocated buffer 

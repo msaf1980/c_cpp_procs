@@ -4,6 +4,7 @@
 # Build dir
 _*
 target
+build
 
 ### Vim
 *.swp
