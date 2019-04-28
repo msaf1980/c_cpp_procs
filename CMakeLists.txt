@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.5 )
 
-project( test )
+project( c_procs )
 
 set( DIR_SOURCES src )
 set( DIR_INCLUDES include )
@@ -14,9 +14,6 @@ include_directories( ${DIR_INCLUDES} )
 
 # Be nice to visual studio
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-# Be nice and export compile commands by default, this is handy for clang-tidy and for other tools.
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories( ${DIR_INCLUDES} )
 
@@ -33,6 +30,9 @@ add_library( netutils ${SOURCES_NETUTILS} )
 aux_source_directory( ${DIR_SOURCES}/pthreadutils SOURCES_PTHREADUTILS )
 add_library( pthreadutils ${SOURCES_PTHREADUTILS} )
 
+aux_source_directory( ${DIR_SOURCES}/ev_loop SOURCES_EV_LOOP )
+add_library( ev_loop ${SOURCES_EV_LOOP} )
+
 #if ( DEFINED DIR_TESTS AND BUILD_TESTING )
 if ( DEFINED DIR_TESTS )
     #set enable testing
@@ -43,4 +43,8 @@ if ( DEFINED DIR_TESTS )
             add_subdirectory( ${dir} )
         endif()
     endforeach()
+endif()
+
+if(DEFINED ENV{DEVENV})
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()

@@ -1,16 +1,18 @@
 #include "netutils/netutils.h"
 #include "strutils.h"
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 int set_reuseaddr(int sock_fd) {
     int reuse = 1;
-    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0)
+    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) <
+        0)
         return -1;
 #ifdef SO_REUSEPORT
     /* since Linux 3.9 */
-    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEPORT, &reuse, sizeof(reuse)) < 0)
+    if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEPORT, &reuse, sizeof(reuse)) <
+        0)
         return -1;
 #endif
     return 0;

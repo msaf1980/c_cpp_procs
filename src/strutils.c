@@ -1,8 +1,8 @@
 #include <errno.h>
 #include <stdarg.h>
-#include <strutils.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
+#include <strutils.h>
 
 int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt,
                 ...) {
@@ -24,7 +24,7 @@ int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt,
     if (*p != NULL && initsize == 0)
         return -2;
 
-    if (*p == NULL && (*p = (char *)malloc(size)) == NULL)
+    if (*p == NULL && (*p = (char *) malloc(size)) == NULL)
         return -2;
 
     while (1) { /* Try to print in the allocated space */
@@ -48,7 +48,7 @@ int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt,
         size = n + 1;                      /* Precisely what is needed */
         if (maxsize > 0 && size > maxsize) /* maxsize */
             return n;
-        if ((np = (char *)realloc(p, size)) == NULL) { /* realloc failed */
+        if ((np = (char *) realloc(p, size)) == NULL) { /* realloc failed */
             free(p);
             return -2;
         } else

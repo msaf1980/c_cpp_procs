@@ -4,7 +4,7 @@
 #include "pthreadutils/thrdpool.h"
 
 int thrdpool_init(thrdpool_t *pool, size_t workers, pthread_attr_t attr,
-                  void *(*function)(void *)) {
+                  void *(*function)(void *) ) {
     int ec = 0;
     size_t i;
     if (pool == NULL || workers == 0)
@@ -28,7 +28,7 @@ int thrdpool_init(thrdpool_t *pool, size_t workers, pthread_attr_t attr,
     /* Create workers thread */
     for (i = 0; i < workers; i++) {
         if ((ec = pthread_create(pool->workers + i, &attr, *function,
-                                 (void *)pool)) != 0) {
+                                 (void *) pool)) != 0) {
             thrdpool_destroy(pool, 0);
             return ec;
         }
