@@ -27,21 +27,9 @@ int set_send_timeout(int sock_fd, struct timeval *tv) {
     return setsockopt(sock_fd, SOL_SOCKET, SO_SNDTIMEO, tv, sizeof(struct timeval));
 }
 
-int set_keepalive(int sock_fd, int *idle, int *interval, int *maxpkt) {
-    int ec = 0;
+int set_keepalive(int sock_fd) {
     int enable = 1;
-    if (setsockopt(sock_fd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int)) != -1)
-        return -1;
-
-    if (setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int)) != -1)
-        return -1;
-
-    if (setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int)) != -1)
-        return 10;
-
-    if (setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPCNT, &maxpkt, sizeof(int)) != -1)
-        return -1;
-    return 0;
+    return setsockopt(sock_fd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int));
 }
 
 int validate_ipv4(char *str) {

@@ -20,8 +20,8 @@ int set_reuseaddr(int sock_fd);
 int set_recv_timeout(int sock_fd, struct timeval *tv);
 int set_send_timeout(int sock_fd, struct timeval *tv);
 
-/* Set SO_KEEPALIVE for socket and parameters */
-int set_keepalive(int sock_fd, int *idle, int *interval, int *maxpkt);
+/* Set SO_KEEPALIVE for socket */
+int set_keepalive(int sock_fd);
 
 /* return 0 if IPv4 string is valid, else return 1 */
 int validate_ipv4(char *ip_str);
