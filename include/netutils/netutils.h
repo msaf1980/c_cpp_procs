@@ -22,6 +22,12 @@ int set_send_timeout(int sock_fd, struct timeval *tv);
 
 /* Set SO_KEEPALIVE for socket */
 int set_keepalive(int sock_fd);
+/* Set TCP_KEEPIDLE */
+int set_keepalive_idle(int sock_fd, int idle);
+/* Set TCP_KEEPINTVL */
+int set_keepalive_interval(int sock_fd, int interval);
+/* Set TCP_KEEPCNT */
+int set_keepalive_probes(int sock_fd, int probes);
 
 /* return 0 if IPv4 string is valid, else return 1 */
 int validate_ipv4(char *ip_str);

@@ -32,6 +32,18 @@ int set_keepalive(int sock_fd) {
     return setsockopt(sock_fd, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int));
 }
 
+int set_keepalive_idle(int sock_fd, int idle) {
+    return setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(int));
+}
+
+int set_keepalive_interval(int sock_fd, int interval) {
+    return setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof(int));
+}
+
+int set_keepalive_probes(int sock_fd, int probes) {
+    return setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPCNT, &probes, sizeof(int));
+}
+
 int validate_ipv4(char *str) {
     int dots = 0, digits = 0;
     char dbuf[4];
