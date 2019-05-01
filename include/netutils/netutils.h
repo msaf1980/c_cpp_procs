@@ -17,6 +17,7 @@ extern "C" {
 /* Set SO_REUSEADDR for listen socket */
 int set_reuseaddr(int sock_fd);
 
+/* errno set to EAGAIN in recv/send on timeout */
 int set_recv_timeout(int sock_fd, struct timeval *tv);
 int set_send_timeout(int sock_fd, struct timeval *tv);
 
@@ -28,6 +29,11 @@ int set_keepalive_idle(int sock_fd, int idle);
 int set_keepalive_interval(int sock_fd, int interval);
 /* Set TCP_KEEPCNT */
 int set_keepalive_probes(int sock_fd, int probes);
+
+/* try recv until end char on the end readed bytes or max_len reached */
+ssize_t recv_try(int sock_fd, char *buf, size_t max_len, int flag, size_t *rsize, short *running, const char end);
+/* try send until len reached */
+ssize_t send_try(int sock_fd, char *buf, size_t len, int flag, size_t *wsize, short *running);
 
 /* return 0 if IPv4 string is valid, else return 1 */
 int validate_ipv4(char *ip_str);

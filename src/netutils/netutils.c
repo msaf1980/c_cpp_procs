@@ -44,6 +44,50 @@ int set_keepalive_probes(int sock_fd, int probes) {
     return setsockopt(sock_fd, IPPROTO_TCP, TCP_KEEPCNT, &probes, sizeof(int));
 }
 
+ssize_t recv_try(int sock_fd, char *buf, size_t max_len, int flag, size_t *rsize, short *running, const char end) {
+    ssize_t n = 0;
+    int i = 0;
+    char *pbuf = buf;
+    *rsize = 0;
+
+    while (*running) {
+        n = recv(sock_fd, pbuf, max_len, flag);
+        if (n <= 0) {
+            return n;
+        } else {
+            pbuf += n;
+            *rsize += n;
+            max_len -= n;
+            if (max_len == 0 || buf[*rsize-1] == end) {
+                return *rsize;
+            }
+        }
+    }
+    return *rsize;
+}
+
+ssize_t send_try(int sock_fd, char *buf, size_t len, int flag, size_t *wsize, short *running) {
+    ssize_t n = 0;
+    int i = 0;
+    char *pbuf = buf;
+    *wsize = 0;
+
+    while (running) {
+        n = send(sock_fd, pbuf, len, flag);
+        if (n <=0) {
+            return n;
+        } else {
+            pbuf += n;
+            *wsize += n;
+            len -= n;
+            if (len == 0) {
+               return *wsize;
+            }
+        }
+    }
+    return *wsize;
+}
+
 int validate_ipv4(char *str) {
     int dots = 0, digits = 0;
     char dbuf[4];
