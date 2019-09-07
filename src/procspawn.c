@@ -1,7 +1,8 @@
-#include "procspawn.h"
 #include <errno.h>
 #include <string.h>
 #include <sys/wait.h>
+
+#include <c_procs/procspawn.h>
 
 pid_t proc_spawn(const char *command, char *const arg[], char *const env[],
                  int *pipes, short handle_err) {

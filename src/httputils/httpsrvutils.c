@@ -1,5 +1,5 @@
-#include "httputils/httpsrvutils.h"
-#include "httputils/httpcodes.h"
+#include <c_procs/httputils/httpsrvutils.h>
+#include <c_procs/httputils/httpcodes.h>
 
 const char *end_tmpl = "\r\n";
 

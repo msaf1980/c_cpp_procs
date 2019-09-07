@@ -3,6 +3,8 @@
 
 # Build dir
 _*
+bin
+lib
 target
 build
 

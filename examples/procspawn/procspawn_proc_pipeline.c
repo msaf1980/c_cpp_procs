@@ -8,8 +8,9 @@
 
 #include <limits.h>
 
-#include "procspawn.h"
-#include "procutils.h"
+#include <c_procs/procspawn.h>
+#include <c_procs/procutils.h>
+#include <c_procs/fileutils.h>
 
 #define EC(cond, label, code, x)                                               \
     if (cond) {                                                                \
@@ -23,19 +24,6 @@
         x;                                                                     \
         goto label;                                                            \
     }
-
-int set_nonblock(int fd) {
-    int flags;
-/* Fixme: O_NONBLOCK is defined but broken on SunOS 4.1.x and AIX 3.2.5. */
-#if defined(O_NONBLOCK)
-    if (-1 == (flags = fcntl(fd, F_GETFL, 0)))
-        flags = 0;
-    return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-#else
-    flags = 1;
-    return ioctl(fd, FIOBIO, &flags);
-#endif
-}
 
 int main(int argc, char **argv) {
     char buf[PIPE_BUF];

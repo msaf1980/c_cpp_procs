@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "procutils.h"
+#include <c_procs/procutils.h>
 
 #define SIZE_INC 7
 

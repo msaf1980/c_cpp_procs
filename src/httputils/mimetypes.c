@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "httputils/mimetypes.h"
+#include <c_procs/httputils/mimetypes.h>
 
 const char *mime_type_by_file_ext(char *filename) {
     char *ext = strrchr(filename, '.');

@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <daemonutils.h>
+#include <c_procs/daemonutils.h>
 
 int daemon_init(const int background, const int changedir, const int closefd) {
     int fd0, fd1, fd2;

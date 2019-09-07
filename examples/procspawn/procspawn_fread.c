@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "procspawn.h"
+#include <c_procs/procspawn.h>
 
 #define EC(cond, label, code, x)                                               \
     if (cond) {                                                                \

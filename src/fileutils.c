@@ -2,10 +2,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "fileutils.h"
+#include <c_procs/fileutils.h>
 
 int set_nonblock(int fd) {
     int flags;
+/* Fixme: O_NONBLOCK is defined but broken on SunOS 4.1.x and AIX 3.2.5. */
 #if defined(O_NONBLOCK)
     if ((flags = fcntl(fd, F_GETFL, 0)) == -1)
         flags = 0;
