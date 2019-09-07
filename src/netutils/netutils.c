@@ -31,10 +31,27 @@ int set_recv_timeout(int sock_fd, struct timeval *tv) {
 	                  sizeof(struct timeval));
 }
 
+int set_recv_timeout_microsec(int sock_fd, size_t microseconds) {
+	struct timeval tv;
+	tv.tv_sec = microseconds / 1000000;
+	tv.tv_usec = microseconds % 1000000;
+	return setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO, &tv,
+	                  sizeof(struct timeval));
+}
+
 int set_send_timeout(int sock_fd, struct timeval *tv) {
 	return setsockopt(sock_fd, SOL_SOCKET, SO_SNDTIMEO, tv,
 	                  sizeof(struct timeval));
 }
+
+int set_send_timeout_microsec(int sock_fd, size_t microseconds) {
+	struct timeval tv;
+	tv.tv_sec = microseconds / 1000000;
+	tv.tv_usec = microseconds % 1000000;
+	return setsockopt(sock_fd, SOL_SOCKET, SO_SNDTIMEO, &tv,
+	                  sizeof(struct timeval));
+}
+
 
 int set_keepalive(int sock_fd) {
 	int enable = 1;

@@ -25,6 +25,8 @@ int set_reuseport(int sock_fd);
 /* errno set to EAGAIN in recv/send on timeout */
 int set_recv_timeout(int sock_fd, struct timeval *tv);
 int set_send_timeout(int sock_fd, struct timeval *tv);
+int set_recv_timeout_microsec(int sock_fd, size_t microseconds);
+int set_send_timeout_microsec(int sock_fd, size_t microseconds);
 
 /* Set SO_KEEPALIVE for socket */
 int set_keepalive(int sock_fd);
