@@ -7,21 +7,24 @@
 #include <c_procs/netutils/netutils.h>
 #include <c_procs/strutils.h>
 
-int set_reuseaddr(int sock_fd, int port_reuse) {
+int set_reuseaddr(int sock_fd) {
 	int reuse = 1;
 	if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) <
 	    0)
 		return -1;
-#ifdef SO_REUSEPORT
-	/* since Linux 3.9 */
-	if (port_reuse) {
-		if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEPORT, &reuse,
-		               sizeof(reuse)) < 0)
-			return -1;
-	}
-#endif
 	return 0;
 }
+
+#ifdef SO_REUSEPORT
+/* since Linux 3.9 */
+int set_reuseport(int sock_fd) {
+	int reuse = 1;
+	if (setsockopt(sock_fd, SOL_SOCKET, SO_REUSEPORT, &reuse, sizeof(reuse)) <
+	    0)
+		return -1;
+	return 0;
+}
+#endif
 
 int set_recv_timeout(int sock_fd, struct timeval *tv) {
 	return setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO, tv,
