@@ -63,6 +63,11 @@ int vsnprintf_l(char **p, size_t initsize, size_t maxsize, const char *fmt,
 long int      str2l(const char *str, char **endptr, const int base);
 long long int str2ll(const char *str, char **endptr, const int base);
 
+/* split sring, after use free with arg_free */
+char **arg_split(const char *str, int *n, char delim);
+/* free allocated by arg_split */
+void arg_free(char ***p);
+
 #ifdef __cplusplus
 }
 #endif

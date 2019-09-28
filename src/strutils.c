@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include <c_procs/strutils.h>
@@ -120,3 +121,72 @@ long long int str2ll(const char *str, char **endptr, const int base) {
 	}
 	return n;
 }
+
+#define SIZE_INC 10
+
+char **arg_split(const char *str, int *n, char delim) {
+    const char *p, *s;
+    char **new_arg;
+    short space;
+
+    int asize = SIZE_INC; /* allocated_size - 1 */
+    char **arg = malloc((asize + 1) * sizeof(char *));
+    if (arg == NULL)
+        return NULL;
+
+    *n = 0;
+    space = 1;
+    s = NULL;
+    p = str;
+    while (1) {
+        if (*p == '\0' && s == NULL)
+            break;
+        else if (*p == '\0' || (*p == delim && space && s != NULL)) {
+            if (*n == asize) {
+                asize += SIZE_INC + 1;
+                new_arg = realloc(arg, (asize + 1) * sizeof(char *));
+                if (new_arg == NULL) {
+                    arg_free(&arg);
+                    return NULL;
+                } else
+                    arg = new_arg;
+            }
+            arg[*n] = strndup(s, p - s);
+            (*n)++;
+            if (*p == '\0')
+                break;
+            s = NULL;
+        } else if (*p != delim) {
+            if (*p == '"') {
+                if (space) {
+                    space = 0;
+                } else
+                    space = 1;
+            }
+            if (s == NULL)
+                s = p;
+        }
+        p++;
+    }
+    arg[*n] = NULL;
+
+    if (*n < asize) {
+        new_arg = realloc(arg, (*n + 1) * sizeof(char *));
+        if (new_arg != NULL)
+            return new_arg;
+    }
+    return arg;
+}
+
+void arg_free(char ***str) {
+    char **p;
+    if (*str == NULL)
+        return;
+    p = *str;
+    while (*p != NULL) {
+        free(*p);
+        p++;
+    }
+    free(*str);
+}
+
