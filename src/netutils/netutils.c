@@ -33,8 +33,8 @@ int set_recv_timeout(int sock_fd, struct timeval *tv) {
 
 int set_recv_timeout_microsec(int sock_fd, size_t microseconds) {
 	struct timeval tv;
-	tv.tv_sec = microseconds / 1000000;
-	tv.tv_usec = microseconds % 1000000;
+	tv.tv_sec = (ssize_t) microseconds / 1000000;
+	tv.tv_usec = (ssize_t) microseconds % 1000000;
 	return setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO, &tv,
 	                  sizeof(struct timeval));
 }
@@ -46,8 +46,8 @@ int set_send_timeout(int sock_fd, struct timeval *tv) {
 
 int set_send_timeout_microsec(int sock_fd, size_t microseconds) {
 	struct timeval tv;
-	tv.tv_sec = microseconds / 1000000;
-	tv.tv_usec = microseconds % 1000000;
+	tv.tv_sec = (ssize_t) microseconds / 1000000;
+	tv.tv_usec = (ssize_t) microseconds % 1000000;
 	return setsockopt(sock_fd, SOL_SOCKET, SO_SNDTIMEO, &tv,
 	                  sizeof(struct timeval));
 }
@@ -72,49 +72,47 @@ int set_keepalive_probes(int sock_fd, int probes) {
 }
 
 ssize_t recv_try(int sock_fd, char *buf, size_t max_len, int flag,
-                 size_t *rsize, short *running, const char end) {
+                 size_t *rsize, short try_count, const char end) {
 	ssize_t n = 0;
-	int     i = 0;
 	char *  pbuf = buf;
 	*rsize = 0;
 
-	while (*running) {
+	for (short i = 0; i < try_count; i++) {
 		n = recv(sock_fd, pbuf, max_len, flag);
-		if (n <= 0) {
+		if (n < 0) {
 			return n;
 		} else {
 			pbuf += n;
-			*rsize += n;
-			max_len -= n;
+			*rsize += (size_t) n;
+			max_len -= (size_t) n;
 			if (max_len == 0 || buf[*rsize - 1] == end) {
-				return *rsize;
+				return (ssize_t) *rsize;
 			}
 		}
 	}
-	return *rsize;
+	return (ssize_t) *rsize;
 }
 
 ssize_t send_try(int sock_fd, char *buf, size_t len, int flag, size_t *wsize,
-                 short *running) {
+                 short try_count) {
 	ssize_t n = 0;
-	int     i = 0;
 	char *  pbuf = buf;
 	*wsize = 0;
 
-	while (running) {
+	for (short i = 0; i < try_count; i++) {
 		n = send(sock_fd, pbuf, len, flag);
 		if (n <= 0) {
 			return n;
 		} else {
 			pbuf += n;
-			*wsize += n;
-			len -= n;
+			*wsize += (size_t) n;
+			len -= (size_t) n;
 			if (len == 0) {
-				return *wsize;
+				return (ssize_t) *wsize;
 			}
 		}
 	}
-	return *wsize;
+	return (ssize_t) *wsize;
 }
 
 int validate_ipv4(char *str) {
@@ -127,6 +125,8 @@ int validate_ipv4(char *str) {
 	while (1) {
 		/* after parsing string, it must contain only digits */
 		if (*str == '\0' || *str == '.') {
+			long  n;
+			char *tmp;
 			if (digits == 0 || dots > 4)
 				return 0;
 			else if (*str == '\0' && (dots == 0 || dots == 3))
@@ -135,8 +135,6 @@ int validate_ipv4(char *str) {
 				return 0;
 			dbuf[digits] = '\0';
 			digits = 0;
-			long  n;
-			char *tmp;
 			n = str2l(dbuf, &tmp, 10);
 			if (errno != 0)
 				return 0;

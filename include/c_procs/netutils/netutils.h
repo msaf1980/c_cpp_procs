@@ -40,10 +40,10 @@ int set_keepalive_probes(int sock_fd, int probes);
 /* try recv until end char on the end readed bytes, max_len reached or error
  * returned */
 ssize_t recv_try(int sock_fd, char *buf, size_t max_len, int flag,
-                 size_t *rsize, short *running, const char end);
+                 size_t *rsize, short try_count, const char end);
 /* try send until len reached or error returned */
 ssize_t send_try(int sock_fd, char *buf, size_t len, int flag, size_t *wsize,
-                 short *running);
+                 short try_count);
 
 /* return 0 if IPv4 string is valid, else return 1 */
 int validate_ipv4(char *ip_str);

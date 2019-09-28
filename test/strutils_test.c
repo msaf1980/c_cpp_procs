@@ -11,7 +11,6 @@
 void strlcpy_test() {
 	char   src[10];
 	char   dst[10];
-	char   buf[1024];
 	size_t n, s;
 
 	strcpy(src, "test");
@@ -92,35 +91,35 @@ void str2ll_test() {
 	/* overflow check */
 	buf = "922337203685477580700000";
 	n = str2l(buf, &endptr, 10);
-	DWARN_F(errno == ERANGE, "'%s' -> %ld", buf, n);
+	DWARN_F(errno == ERANGE, "'%s' -> %lld", buf, n);
 
 	/* not a number check */
 	buf = "a1";
 	n = str2l(buf, &endptr, 10);
-	DWARN_F(errno == EINVAL, "'%s' -> %ld", buf, n);
+	DWARN_F(errno == EINVAL, "'%s' -> %lld", buf, n);
 
 	buf = "a 1";
 	n = str2l(buf, &endptr, 10);
-	DWARN_F(errno == EINVAL, "'%s' -> %ld", buf, n);
+	DWARN_F(errno == EINVAL, "'%s' -> %lld", buf, n);
 
 	buf = " 1 a";
 	n = str2l(buf, &endptr, 10);
 	DWARN_F(errno == ENOTEMPTY && n == 1l && strcmp(endptr, " a") == 0,
-	        "'%s' -> %ld ('%s')", buf, n, endptr);
+	        "'%s' -> %lld ('%s')", buf, n, endptr);
 
 	buf = " 1 ";
 	n = str2l(buf, &endptr, 10);
 	DWARN_F(errno == ENOTEMPTY && n == 1l && strcmp(endptr, " ") == 0,
-	        "'%s' -> %ld ('%s')", buf, n, endptr);
+	        "'%s' -> %lld ('%s')", buf, n, endptr);
 
 	/* valid long */
 	buf = "10";
 	n = str2l(buf, &endptr, 10);
-	DWARN_F(errno == 0 && n == 10l, "'%s' -> %ld", buf, n);
+	DWARN_F(errno == 0 && n == 10l, "'%s' -> %lld", buf, n);
 
 	buf = "-1";
 	n = str2l(buf, &endptr, 10);
-	DWARN_F(errno == 0 && n == -1l, "'%s' -> %ld", buf, n);
+	DWARN_F(errno == 0 && n == -1l, "'%s' -> %lld", buf, n);
 }
 
 void arg_split_test() {

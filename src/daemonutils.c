@@ -19,7 +19,7 @@ int ignore_sigpipe() {
 
 int daemon_init(const int background, const int changedir, const int closefd) {
 	int fd0, fd1, fd2;
-	int pid, i;
+	int pid;
 
 	if (background) {
 		if ((pid = fork()) == -1) { /* fork failed */
@@ -62,7 +62,7 @@ int daemon_init(const int background, const int changedir, const int closefd) {
 				maxclosefd = rl.rlim_max;
 		}
 
-		for (i = maxclosefd; i >= 0; i--)
+		for (int i = (int) maxclosefd; i >= 0; i--)
 			close(i);
 
 		/* Set file descriptors 0, 1 и 2 to /dev/null */

@@ -52,7 +52,7 @@ int create_pid_file(const char *pid_file, const pid_t pid) {
     if (flock(fd, LOCK_EX | LOCK_NB) == -1)
         goto ERR;
     snprintf(buf, sizeof(buf), "%ld\n", (long)pid);
-    if (write(fd, buf, strlen(buf)) != strlen(buf))
+    if (write(fd, buf, strlen(buf)) != (ssize_t) strlen(buf))
         goto ERR;
     return fd;
 ERR:

@@ -27,7 +27,7 @@ extern "C" {
 static size_t DWARN_COUNT = 0;         /* test fail count */
 static size_t DWARN_COUNT_SUCCESS = 0; /* test success count */
 
-static size_t DWARN_VERBOSE = 0; /* verbose flag - print successed test */
+static int DWARN_VERBOSE = 0; /* verbose flag - print successed test */
 
 #define DASSERT(x, msg)                                                        \
 	if (!(x)) {                                                                \
@@ -84,7 +84,7 @@ int DSTATUS() {
 	fprintf(stderr, "%lu test passed\n", DWARN_COUNT_SUCCESS);
 	if (DWARN_COUNT)
 		fprintf(stderr, "%lu tests failed\n", DWARN_COUNT);
-	return DWARN_COUNT;
+	return DWARN_COUNT == 0 ? 0 : 1;
 }
 
 #ifdef __cplusplus
